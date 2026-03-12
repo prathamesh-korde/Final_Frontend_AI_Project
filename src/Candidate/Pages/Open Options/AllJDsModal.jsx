@@ -172,7 +172,7 @@ function AllJDsModal({ selectedJob, handleCloseModal, handleApplyFromModal }) {
                             <MapPin size={12} className="text-indigo-500" /> {Array.isArray(selectedJob.location) ? selectedJob.location[0] : selectedJob.location}
                         </span>
                         <span className="px-2 md:px-3 py-1 md:py-1.5 bg-red-50 text-red-500 rounded-full text-[10px] md:text-xs font-bold">
-                            {selectedJob.dueDate || selectedJob.offerId?.dueDate || 'Apply Soon'}
+                            {selectedJob.dueDate || selectedJob.offerId?.dueDate.slice(0, 10) || 'Apply Soon'}
                         </span>
                         <span className="px-2 md:px-3 py-1 md:py-1.5 bg-fuchsia-50 text-fuchsia-600 rounded-full text-[10px] md:text-xs font-bold uppercase">
                             {selectedJob.appliedCandidates?.length || 0}+ Applicants
@@ -226,8 +226,8 @@ function AllJDsModal({ selectedJob, handleCloseModal, handleApplyFromModal }) {
                     </div>
 
                     {/* Right Sidebar Column */}
-                    <div className="w-full lg:w-[380px] bg-[#F9F9FB] p-6 lg:p-8 space-y-8 flex-shrink-0">
-                        <div>
+                    <div className="w-full lg:w-[380px]   p-6 lg:p-8 space-y-8 flex-shrink-0">
+                        <div className="border-b border-gray-100 bg-[#F9F9FB]">
                             <div className="flex items-center gap-2 mb-4 md:mb-6">
                                 <div className="p-1 bg-white rounded shadow-sm"><ViewDetailsLogo size={28} accentColor="#4F46E5" /></div>
                                 <h3 className="text-lg md:text-xl font-bold text-gray-900">Overview</h3>
@@ -273,14 +273,15 @@ function AllJDsModal({ selectedJob, handleCloseModal, handleApplyFromModal }) {
                                     <div>
                                         <p className="text-[10px] md:text-[11px] text-gray-400 font-bold uppercase">Due Date</p>
                                         <p className="text-xs md:text-sm font-bold text-gray-700">
-                                            {selectedJob.dueDate || selectedJob.offerId?.dueDate || 'Apply Soon'}
+                                            {selectedJob.dueDate || selectedJob.offerId?.dueDate.slice(0, 10)  || 'Apply Soon'}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
 
-                        <div>
+                        <div className="bg-[#F9F9FB]">
                             <div className="flex items-center gap-2 mb-4">
                                 <BuildingLogo size={32} className="header-logo" />
                                 <h3 className="text-lg md:text-xl font-bold text-gray-900">About The Company</h3>

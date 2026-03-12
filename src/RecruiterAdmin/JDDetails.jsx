@@ -430,7 +430,7 @@ function JDDetails() {
   const ScoreBadge = ({ score }) => {
     const s = Number(score || 0);
     const deg = Math.max(0, Math.min(100, s)) * 3.6;
-    const color = s >= 70 ? "#16a34a" : s >= 40 ? "#f59e0b" : "#ef4444";
+    const color = s >= 50 ? "#166534" : s >= 40 ? "#f59e0b" : "#ef4444";
 
     return (
       <div className="flex items-center gap-2">
@@ -487,7 +487,7 @@ function JDDetails() {
                     : "bg-[#5B4BFF] hover:bg-[#4A3CF0]"}`}
               >
                 <Filter size={16} className={isFiltering ? "animate-spin" : ""} />
-                {isFiltering ? "Filtering..." : "Not filtering"}
+                {isFiltering ? "Filtering..." : "Filter"}
               </button>
             </div>
           </div>
@@ -651,7 +651,7 @@ function JDDetails() {
                         <td className="py-4 px-4">
                           <button
                             onClick={() => handleViewCandidate(candidate)}
-                            className="w-9 h-9 rounded-full border border-[#D7D2FF] bg-white hover:bg-[#F3F1FF] flex items-center justify-center"
+                            className="w-9 h-9 rounded-lg bg-[#F3F1FF] flex items-center justify-center"
                           >
                             <Eye size={16} className="text-[#5B4BFF]" />
                           </button>

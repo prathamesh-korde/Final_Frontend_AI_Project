@@ -1,19 +1,26 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Home,
   UserPlus,
   Building2,
-  LogOut,
   Search,
   Headphones,
   ChevronsUpDown,
 } from 'lucide-react';
+import user from '../../img/man-head.png';
+import logout from '../../img/power3.png';
+import axios from "axios";
+import { baseUrl } from "../../utils/ApiConstants";
 
 const RMGSidebar = ({ isOpen = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeNav, setActiveNav] = useState('');
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileBtnRef = useRef(null);
+  const profileMenuRef = useRef(null);
+  const [userData, setUserData] = useState(null);
 
   const navItems = useMemo(
     () => [
@@ -64,6 +71,52 @@ const RMGSidebar = ({ isOpen = true }) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/Login');
+  };
+
+  useEffect(() => {
+    const onDocMouseDown = (e) => {
+      if (!isProfileMenuOpen) return;
+      const btn = profileBtnRef.current;
+      const menu = profileMenuRef.current;
+      if (btn?.contains(e.target) || menu?.contains(e.target)) return;
+      setIsProfileMenuOpen(false);
+    };
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsProfileMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', onDocMouseDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onDocMouseDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isProfileMenuOpen]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${baseUrl}/auth/meAll`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(res.data);
+        
+        setUserData(res.data.data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const getInitials = (name) => {
+    if (!name) return '';
+    const parts = name.trim().split(/\s+/);
+    const first = parts[0]?.[0] || '';
+    const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+    return (first + last).toUpperCase();
   };
 
   const NavItem = ({ name, path, icon: Icon, label }) => {
@@ -134,20 +187,6 @@ const RMGSidebar = ({ isOpen = true }) => {
           {navItems.map((item) => (
             <NavItem key={item.name} {...item} />
           ))}
-
-          <button
-            onClick={handleLogout}
-            className={[
-              "group w-full flex items-center gap-3",
-              "h-9 px-3 rounded-md text-left",
-              "text-[12px] font-medium tracking-wide",
-              "transition-colors duration-200",
-              "text-white/80 hover:bg-white/10 hover:text-white",
-            ].join(" ")}
-          >
-            <LogOut size={16} className="text-white/80" />
-            <span className="truncate">Logout</span>
-          </button>
         </nav>
 
         <div className="mt-6">
@@ -186,8 +225,60 @@ const RMGSidebar = ({ isOpen = true }) => {
         </div>
       </div>
 
-      <div className="shrink-0 pt-3 border-t border-white/10">
+      <div className="shrink-0 pt-3 border-t border-white/10 relative">
+        {isProfileMenuOpen && (
+          <div
+            ref={profileMenuRef}
+            className={[
+              'absolute left-0 right-0 bottom-[64px] z-50',
+              'bg-white rounded-2xl',
+              'shadow-[0_20px_40px_rgba(0,0,0,0.35)]',
+              'ring-1 ring-black/10',
+              'overflow-hidden',
+            ].join(' ')}
+          >
+            <button
+              onClick={() => {
+                setIsProfileMenuOpen(false);
+                navigate('/profile');
+              }}
+              className={[
+                'w-full flex items-center gap-3',
+                'px-4 py-2 text-left',
+                'text-[#2f2bd6]',
+                'transition-colors',
+                'hover:bg-[#F3F2FF]',
+              ].join(' ')}
+            >
+              <div className="grid place-items-center h-8 w-8 rounded-full bg-white ring-1 ring-black/5">
+                <img src={user} alt="User" className="h-[10] w-[10] rounded-full" />
+              </div>
+              <span className="text-[16px] font-medium">Profile</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setIsProfileMenuOpen(false);
+                handleLogout();
+              }}
+              className={[
+                'w-full flex items-center gap-3',
+                'px-4 py-2 text-left',
+                'text-red-600',
+                'transition-colors',
+                'hover:bg-red-50',
+              ].join(' ')}
+            >
+              <div className="grid place-items-center h-8 w-8 rounded-full bg-white ring-1 ring-black/5">
+                <img src={logout} alt="User" className="h-[10] w-[10] rounded-full" />
+              </div>
+              <span className="text-[16px] font-medium">Log Out</span>
+            </button>
+          </div>
+        )}
+
         <button
+          ref={profileBtnRef}
           className={[
             "w-full flex items-center gap-3",
             "rounded-full p-3",
@@ -195,19 +286,17 @@ const RMGSidebar = ({ isOpen = true }) => {
             "ring-1 ring-white/10",
             "transition-colors",
           ].join(" ")}
-          onClick={() => navigate("/profile")}
+          onClick={() => setIsProfileMenuOpen((v) => !v)}
         >
-          <img
-            src="https://i.pravatar.cc/80?img=47"
-            alt="profile"
-            className="h-9 w-9 rounded-full ring-2 ring-white/20"
-          />
+          <div className="h-9 w-9 rounded-full ring-2 ring-white/20 bg-[#332173] flex items-center justify-center text-white text-[14px] font-bold uppercase shrink-0">
+            {getInitials(userData?.name)}
+          </div>
           <div className="min-w-0 flex-1 text-left">
-            <div className="text-[12px] font-semibold leading-4 truncate">
-              RMG Admin
+            <div className="text-[12px] font-semibold leading-4 truncate capitalize">
+              {userData?.name || "Loading..."}
             </div>
             <div className="text-[10px] text-white/65 leading-4 truncate">
-              Resource Manager
+              {userData?.role || "Resource Manager"}
             </div>
           </div>
           <ChevronsUpDown size={16} className="text-white/70" />

@@ -107,22 +107,68 @@ function PriorityPill({ value }) {
   );
 }
 
-function Chips({ items = [], max = 3 }) {
+function ChipsWithPopup({ items = [], max = 3, type = "skill", rowId, openPopup, setOpenPopup, label = "Items" }) {
   const list = Array.isArray(items) ? items : [];
   const shown = list.slice(0, max);
-  const rest = list.length - shown.length;
+  const remaining = list.slice(max);
+  const hasMore = remaining.length > 0;
+  const popupId = `${type}-${rowId}`;
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {shown.map((s, i) => (
-        <span key={i} className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">
-          {s}
-        </span>
-      ))}
-      {rest > 0 && (
-        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">+{rest}</span>
+    <>
+      <div className="flex items-center gap-2 flex-wrap">
+        {shown.map((s, i) => (
+          <span key={i} className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700 whitespace-nowrap">
+            {s}
+          </span>
+        ))}
+        {hasMore && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenPopup(openPopup === popupId ? null : popupId);
+            }}
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 transition cursor-pointer"
+          >
+            +{remaining.length}
+          </button>
+        )}
+      </div>
+
+      {openPopup === popupId && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+          onClick={() => setOpenPopup(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl border border-indigo-200 p-6 min-w-[320px] max-w-[480px] w-[90vw] sm:w-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-gray-800">All {label}</h3>
+              <button
+                type="button"
+                onClick={() => setOpenPopup(null)}
+                className="h-7 w-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition text-lg leading-none cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {list.map((s, i) => (
+                <span
+                  key={i}
+                  className="rounded-full bg-indigo-50 border border-indigo-100 px-3 py-1.5 text-xs font-medium text-indigo-800"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -177,6 +223,8 @@ function JD() {
   const [loading, setLoading] = useState(true);
   const [showSummaryPopup, setShowSummaryPopup] = useState(false);
   const [selectedJDSummary, setSelectedJDSummary] = useState(null);
+  const [openSkillPopup, setOpenSkillPopup] = useState(null);
+  const [openLocationPopup, setOpenLocationPopup] = useState(null);
   const navigate = useNavigate();
 
   const rowsPerPage = 5;
@@ -200,7 +248,7 @@ function JD() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // console.log("jd page data", response.data);
+      console.log("jd page data", response.data);
 
 
       if (response.data.success && response.data.data) {
@@ -268,6 +316,7 @@ function JD() {
       const response = await axios.get(`${baseUrl}/jd/assigned-offers/hr`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+// console.log("incoming jds", response.data);
 
       if (response.data.success) {
         const filteredData = response.data.data
@@ -284,7 +333,13 @@ function JD() {
 
   const handleSelectJD = (jd) => {
     navigate("/RecruiterAdmin-Dashboard/JD/CreateJD", {
-      state: { offerId: jd._id, companyName: jd.companyName },
+      state: {
+        offerId: jd._id,
+        companyName: jd.companyName,
+        location: jd.location,
+        dueDate: jd.dueDate,
+        employmentType: jd.employmentType,
+      },
     });
   };
 
@@ -579,15 +634,28 @@ function JD() {
                             <PriorityPill value={jd.priority} />
                           </td>
                           <td className="px-5 py-4 text-sm text-gray-700">{formatDate(jd.dueDate) || "-"}</td>
-                          <td className="px-5 py-4 text-sm text-gray-700">
-                            <span className="inline-flex items-center gap-2 rounded-full border border-[#E6DAFF] bg-[#F6F1FF] px-3 py-1 text-xs font-medium text-[#5B4CCB]">
-                              <MapPin className="h-3.5 w-3.5" />
-                              {city}
-                            </span>
+                          <td className="px-5 min-w-[300px] py-4 text-sm text-gray-700">
+                            <ChipsWithPopup
+                              items={jd.location || []}
+                              max={3}
+                              type="location"
+                              rowId={jd._id}
+                              openPopup={openLocationPopup}
+                              setOpenPopup={setOpenLocationPopup}
+                              label="Locations"
+                            />
                           </td>
                           <td className="px-5 py-4 text-sm text-gray-700">{jd.experience || "-"}</td>
-                          <td className="px-5 py-4 text-sm text-gray-700">
-                            <Chips items={jd.skills || []} max={3} />
+                          <td className="px-5 min-w-[300px] py-4 text-sm text-gray-700">
+                            <ChipsWithPopup
+                              items={jd.skills || []}
+                              max={3}
+                              type="skill"
+                              rowId={jd._id}
+                              openPopup={openSkillPopup}
+                              setOpenPopup={setOpenSkillPopup}
+                              label="Skills"
+                            />
                           </td>
                           <td className="px-5 py-4 text-sm">
                             <button
@@ -713,7 +781,7 @@ function JD() {
                               <div className="flex items-center gap-3">
                                 <button
                                   onClick={() => handleShowSummary(row)}
-                                  className="h-7 w-7 grid place-items-center rounded-lg border border-[#D8C7FF] text-[#5B4CCB] hover:bg-[#F2EEFF] transition"
+                                  className="h-7 w-7 grid place-items-center rounded-lg bg-[#F2EEFF] text-[#5B4CCB] transition"
                                   aria-label="View JD Summary"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -724,7 +792,7 @@ function JD() {
                                     navigate("/RecruiterAdmin-Dashboard/NonCandidateList", { state: { jdId: row._id } })
                                   }
                                   title="Send Invite"
-                                  className="h-7 w-7 grid place-items-center rounded-lg border border-[#D8C7FF] text-[#5B4CCB] hover:bg-[#F2EEFF] transition"
+                                  className="h-7 w-7 grid place-items-center rounded-lg bg-[#F2EEFF] text-[#5B4CCB] transition"
                                   aria-label="Send Invite"
                                 >
                                   <Share2 className="h-4 w-4" />
@@ -732,7 +800,7 @@ function JD() {
 
                                 <button
                                   onClick={() => handleViewJD(row)}
-                                  className="h-7 w-7 grid place-items-center rounded-lg border border-[#D8C7FF] text-[#5B4CCB] hover:bg-[#F2EEFF] transition"
+                                  className="h-7 w-7 grid place-items-center rounded-lg bg-[#F2EEFF] text-[#5B4CCB] transition"
                                   aria-label="View JD"
                                 >
                                   <ChevronRight className="h-4 w-4" />
