@@ -23,6 +23,10 @@ import Howworks from './views/How It Works/Howworks';
 import Industries from './views/Industries/Industries';
 import About from './views/About/About';
 import Contact from './views/Contact/Contact';
+import FooterAboutUs from './views/FooterPages/AboutUs/About';
+import FooterBlog from './views/FooterPages/Blog/Blog';
+import FooterCareer from './views/FooterPages/Career/career';
+import FooterContactUs from './views/FooterPages/Contact/Contact';
 import Companies from './SuperAdmin/Companies';
 import CompanyDetail from './SuperAdmin/CompanieDetail';
 import Tickets from './SuperAdmin/Tickets';
@@ -88,6 +92,8 @@ import ApplyToJob from './Candidate/Pages/ApplyToJob.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 
 
+
+
 const App = () => {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -114,6 +120,10 @@ const App = () => {
             <Route path="industries" element={<Industries />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="aboutus" element={<FooterAboutUs />} />
+            <Route path="career" element={<FooterCareer />} />
+            <Route path="blog" element={<FooterBlog />} />
+            <Route path="contactus" element={<FooterContactUs />} />
           </Route>
 
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
