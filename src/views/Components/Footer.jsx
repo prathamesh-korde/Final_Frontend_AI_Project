@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Phone, MapPin, Linkedin, Twitter } from 'lucide-react';
 import logo from '../../img/logo.png'; // Assuming your logo image is here
 
+
 export default function Footer() {
   const navigate = useNavigate();
 
@@ -48,10 +49,10 @@ export default function Footer() {
           <div>
             <h4 className="text-base sm:text-lg font-bold mb-4 lg:mb-6 text-indigo-100">Company</h4>
             <ul className="space-y-3 text-sm text-indigo-100/70">
-              <li><button onClick={() => navigate('/about')} className="hover:text-white transition-colors">About Us</button></li>
-              <li><button onClick={() => navigate('/careers')} className="hover:text-white transition-colors">Careers</button></li>
+              <li><button onClick={() => navigate('/aboutus')} className="hover:text-white transition-colors">About Us</button></li>
+              <li><button onClick={() => navigate('/career')} className="hover:text-white transition-colors">Careers</button></li>
               <li><button onClick={() => navigate('/blog')} className="hover:text-white transition-colors">Blog</button></li>
-              <li><button onClick={() => navigate('/contact')} className="hover:text-white transition-colors">Contact</button></li>
+              <li><button onClick={() => navigate('/contactus')} className="hover:text-white transition-colors">Contact</button></li>
             </ul>
           </div>
 
