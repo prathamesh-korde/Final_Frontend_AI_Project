@@ -117,7 +117,7 @@ function Companies() {
         </div>
 
         {/* Table */}
-        <div className="shadow-sm border border-gray-200 rounded-3xl overflow-x-auto">
+        <div className="shadow-sm border border-gray-200 rounded-3xl overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <table className="min-w-[900px] w-full">
             <thead className="bg-gray-100 border border-gray-200 rounded-3xl">
               <tr>

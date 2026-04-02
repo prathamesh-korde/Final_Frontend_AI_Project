@@ -145,7 +145,7 @@ const AdminSidebar = ({ isOpen = true, onToggle }) => {
         </div>
 
         {/* ── Scrollable Nav ── */}
-        <div className="mt-5 flex-1 overflow-y-auto pr-1 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-5 flex-1 overflow-y-auto pr-1 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <nav className="flex flex-col gap-2">
             {navItems.map((item) => (
               <NavItem key={item.name} {...item} />
@@ -166,40 +166,38 @@ const AdminSidebar = ({ isOpen = true, onToggle }) => {
               <span className="truncate">Logout</span>
             </button>
           </nav>
+        </div>
 
-          {/* ── Support Card ── */}
-          <div className="mt-6">
-            <div
-              className={[
-                "rounded-xl p-4",
-                "bg-gradient-to-b from-white/10 to-white/5",
-                "ring-1 ring-white/10",
-              ].join(" ")}
-            >
-              <div className="flex justify-center">
-                <div className="grid place-items-center h-10 w-10 rounded-full bg-white/10 ring-1 ring-white/10">
-                  <Headphones size={18} />
-                </div>
+        {/* ── Support Card — sticky above profile footer ── */}
+        <div className="shrink-0 mb-3">
+          <div
+            className={[
+              "rounded-xl p-4",
+              "bg-gradient-to-b from-white/10 to-white/5",
+              "ring-1 ring-white/10",
+            ].join(" ")}
+          >
+            <div className="flex justify-center">
+              <div className="grid place-items-center h-10 w-10 rounded-full bg-white/10 ring-1 ring-white/10">
+                <Headphones size={18} />
               </div>
-
-              <div className="mt-3 text-center">
-                <div className="text-[12px] font-semibold">Need Support?</div>
-                <div className="mt-1 text-[10px] text-white/65">
-                  Get in touch with our agents
-                </div>
-
-                <button
-                  className={[
-                    "mt-3 w-full h-9 rounded-md",
-                    "bg-[#332173] hover:bg-[#3a2580]",
-                    "text-[12px] font-semibold",
-                    "shadow-[0_10px_22px_rgba(0,0,0,0.25)]",
-                  ].join(" ")}
-                  onClick={() => navigate("/support")}
-                >
-                  Contact Us
-                </button>
+            </div>
+            <div className="mt-3 text-center">
+              <div className="text-[12px] font-semibold">Need Support?</div>
+              <div className="mt-1 text-[10px] text-white/65">
+                Get in touch with our agents
               </div>
+              <button
+                className={[
+                  "mt-3 w-full h-9 rounded-md",
+                  "bg-[#332173] hover:bg-[#3a2580]",
+                  "text-[12px] font-semibold",
+                  "shadow-[0_10px_22px_rgba(0,0,0,0.25)]",
+                ].join(" ")}
+                onClick={() => navigate("/support")}
+              >
+                Contact Us
+              </button>
             </div>
           </div>
         </div>
