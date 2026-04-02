@@ -203,39 +203,39 @@ const AdminSidebar = ({ isOpen = true, onToggle }) => {
               <NavItem key={item.name} {...item} />
             ))}
           </nav>
+        </div>
 
-          <div className="mt-6">
-            <div
-              className={[
-                "rounded-xl p-4",
-                "bg-gradient-to-b from-white/10 to-white/5",
-                "ring-1 ring-white/10",
-              ].join(" ")}
-            >
-              <div className="flex justify-center">
-                <div className="grid place-items-center h-10 w-10 rounded-full bg-white/10 ring-1 ring-white/10">
-                  <Headphones size={18} />
-                </div>
+        <div className="shrink-0 mt-auto mb-3">
+          <div
+            className={[
+              "rounded-xl p-4",
+              "bg-gradient-to-b from-white/10 to-white/5",
+              "ring-1 ring-white/10",
+            ].join(" ")}
+          >
+            <div className="flex justify-center">
+              <div className="grid place-items-center h-10 w-10 rounded-full bg-white/10 ring-1 ring-white/10">
+                <Headphones size={18} />
+              </div>
+            </div>
+
+            <div className="mt-3 text-center">
+              <div className="text-[12px] font-semibold">Need Support?</div>
+              <div className="mt-1 text-[10px] text-white/65">
+                Get in touch with our agents
               </div>
 
-              <div className="mt-3 text-center">
-                <div className="text-[12px] font-semibold">Need Support?</div>
-                <div className="mt-1 text-[10px] text-white/65">
-                  Get in touch with our agents
-                </div>
-
-                <button
-                  className={[
-                    "mt-3 w-full h-9 rounded-md",
-                    "bg-[#332173] hover:bg-[#3a2580]",
-                    "text-[12px] font-semibold",
-                    "shadow-[0_10px_22px_rgba(0,0,0,0.25)]",
-                  ].join(" ")}
-                  onClick={() => navigate("/support")}
-                >
-                  Contact Us
-                </button>
-              </div>
+              <button
+                className={[
+                  "mt-3 w-full h-9 rounded-md",
+                  "bg-[#332173] hover:bg-[#3a2580]",
+                  "text-[12px] font-semibold",
+                  "shadow-[0_10px_22px_rgba(0,0,0,0.25)]",
+                ].join(" ")}
+                onClick={() => navigate("/support")}
+              >
+                Contact Us
+              </button>
             </div>
           </div>
         </div>

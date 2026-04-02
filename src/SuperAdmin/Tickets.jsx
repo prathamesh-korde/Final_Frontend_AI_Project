@@ -172,7 +172,7 @@ function Tickets() {
 
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-300 overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <table className="w-full">
 
               <thead className="bg-gray-50 border-b border-gray-200">
