@@ -17,7 +17,7 @@ export default function ViewResults({ jobData, attempt, onClose }) {
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
             <div className="w-full max-w-4xl max-h-[95vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-gray-200 relative animate-in fade-in zoom-in duration-200">
-                
+
                 {/* Header */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-100 p-6 z-10 flex items-center justify-between">
                     <div>
@@ -52,12 +52,9 @@ export default function ViewResults({ jobData, attempt, onClose }) {
                                 <span className="text-3xl font-black text-emerald-600">{percentage}%</span>
                             </div>
                         </div>
-                        <div className="bg-amber-50 border border-amber-100 p-5 rounded-2xl">
-                            <p className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Violations</p>
-                            <div className="flex items-baseline gap-3">
-                                <span className="text-3xl font-black text-amber-600">{(attempt.tab_switches || 0) + (attempt.inactivities || 0) + (attempt.face_not_visible || 0)}</span>
-                                <span className="text-xs text-amber-500 font-medium leading-tight">Total detected events</span>
-                            </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-600">Phone Number:</span>
+                            <span className="font-semibold text-gray-900">N/A</span>
                         </div>
                     </div>
 
@@ -80,27 +77,17 @@ export default function ViewResults({ jobData, attempt, onClose }) {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="space-y-4">
-                            <h3 className="text-sm font-bold text-gray-900 border-l-4 border-amber-500 pl-3">Proctoring Insights</h3>
-                            <div className="bg-gray-50 rounded-2xl p-6 grid grid-cols-2 gap-4">
-                                <div className="p-3 bg-white rounded-xl border border-gray-100">
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Tab Switches</p>
-                                    <p className="text-lg font-bold text-gray-800">{attempt.tab_switches || 0}</p>
-                                </div>
-                                <div className="p-3 bg-white rounded-xl border border-gray-100">
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Inactivities</p>
-                                    <p className="text-lg font-bold text-gray-800">{attempt.inactivities || 0}</p>
-                                </div>
-                                <div className="p-3 bg-white rounded-xl border border-gray-100">
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Face Not Visible</p>
-                                    <p className="text-lg font-bold text-gray-800">{attempt.face_not_visible || 0}</p>
-                                </div>
-                                <div className="p-3 bg-white rounded-xl border border-gray-100 opacity-50">
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Copy-Paste</p>
-                                    <p className="text-lg font-bold text-gray-800">N/A</p>
-                                </div>
-                            </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-600">Max Score:</span>
+                            <span className="font-semibold text-gray-900">N/A</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-600">Percentage:</span>
+                            <span className="font-semibold text-gray-900">N/A</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-600">Status:</span>
+                            <span className="font-semibold text-gray-900">N/A</span>
                         </div>
                     </div>
 
@@ -115,7 +102,7 @@ export default function ViewResults({ jobData, attempt, onClose }) {
                             {results.map((q, idx) => {
                                 const isCorrect = q.is_correct === true || q.score >= (q.positive_marking * 0.8);
                                 const qType = String(q.type || q.question_type || '').toUpperCase();
-                                
+
                                 return (
                                     <div key={idx} className="group relative bg-white border border-gray-100 rounded-3xl p-6 hover:shadow-lg transition-all border-l-[6px]" style={{ borderLeftColor: isCorrect ? '#10b981' : (q.score > 0 ? '#f59e0b' : '#ef4444') }}>
                                         <div className="flex flex-col md:flex-row gap-6">
@@ -132,7 +119,7 @@ export default function ViewResults({ jobData, attempt, onClose }) {
                                                         {isCorrect ? <CheckCircle2 size={18} className="text-emerald-500" /> : <XCircle size={18} className="text-red-500" />}
                                                     </div>
                                                 </div>
-                                                
+
                                                 <h4 className="text-base font-semibold text-gray-800 leading-relaxed">
                                                     {q.question}
                                                 </h4>
